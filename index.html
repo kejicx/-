@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch积木扩展开发教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            color: #a5d296;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 250px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            height: fit-content;
+        }
+        
+        .main-content {
+            flex: 3;
+            min-width: 300px;
+        }
+        
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        
+        h2 {
+            color: #a5d296;
+            border-bottom: 2px solid #a5d296;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            color: #7cb342;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #a5d296;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 2px solid #f0f0f0;
+            color: #666;
+        }
+        
+        .toc {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 10px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #a5d296;
+            font-weight: 500;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .toc a:hover {
+            background-color: #a5d296;
+            color: white;
+        }
+        
+        .toc a.active {
+            background-color: #a5d296;
+            color: white;
+        }
+        
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 5px;
+        }
+        
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .example-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            background: #fafafa;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #a5d296;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: 0;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            header {
+                padding: 20px 0;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            ul, ol {
+                margin-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>科技创新的Scratch积木扩展开发教程</h1>
+            <div class="subtitle">网页代码制作：通义灵码</div>
+        </header>
+        
+        <div class="content">
+            <div class="sidebar">
+                <h3>目录</h3>
+                <ul class="toc">
+                    <li><a href="#introduction">1. 简介</a></li>
+                    <li><a href="#environment">2. 环境准备</a></li>
+                    <li><a href="#basic-structure">3. 基本结构</a></li>
+                    <li><a href="#block-types">4. 积木类型</a></li>
+                    <li><a href="#parameters">5. 参数处理</a></li>
+                    <li><a href="#api-integration">6. API集成</a></li>
+                    <li><a href="#testing">7. 测试与调试</a></li>
+                    <li><a href="#deployment">8. 部署发布</a></li>
+                    <li><a href="#advanced">9. 高级技巧</a></li>
+                    <li><a href="#examples">10. 实例教程</a></li>
+                    <li><a href="#best-practices">11. 最佳实践</a></li>
+                    <li><a href="#troubleshooting">12. 常见问题</a></li>
+                    <li><a href="#resources">13. 学习资源</a></li>
+                </ul>
+            </div>
+            
+            <div class="main-content">
+                <section id="introduction" class="section">
+                    <h2>1. Scratch扩展开发简介</h2>
+                    <p>Scratch扩展允许开发者为Scratch添加自定义功能块，从而扩展其功能。通过JavaScript编写扩展，可以实现与外部API交互、硬件控制、复杂算法等功能。</p>
+                    
+                    <h3>扩展的优势</h3>
+                    <ul>
+                        <li>增强Scratch功能，满足特定需求</li>
+                        <li>与外部服务集成（如天气API、翻译服务等）</li>
+                        <li>控制硬件设备（如micro:bit、Arduino等）</li>
+                        <li>实现复杂的数学或逻辑运算</li>
+                        <li>创建教育专用工具</li>
+                        <li>个性化定制学习体验</li>
+                        <li>连接真实世界数据</li>
+                    </ul>
+                    
+                    <h3>适用场景</h3>
+                    <ul>
+                        <li>学校编程课程定制</li>
+                        <li>科学实验数据采集</li>
+                        <li>物联网项目开发</li>
+                        <li>游戏化学习工具</li>
+                        <li>艺术创作辅助</li>
+                        <li>数学建模与仿真</li>
+                    </ul>
+                    
+                    <div class="note">
+                        <strong>注意：</strong>本教程基于Scratch 3.0的扩展开发规范，适用于Scratch Desktop和在线版本。
+                    </div>
+                </section>
+                
+                <section id="environment" class="section">
+                    <h2>2. 开发环境准备</h2>
+                    <h3>必要工具</h3>
+                    <ul>
+                        <li>文本编辑器（推荐VS Code）</li>
+                        <li>现代浏览器（Chrome、Firefox等）</li>
+                        <li>本地服务器（用于测试扩展）</li>
+                        <li>Git（版本控制，可选）</li>
+                        <li>Node.js（推荐LTS版本）</li>
+                        <li>代码调试工具</li>
+                    </ul>
+                    
+                    <h3>设置本地开发环境</h3>
+                    <ol>
+                        <li>安装Node.js（推荐LTS版本）
+                            <ul>
+                                <li>访问 <a href="https://nodejs.org" target="_blank">nodejs.org</a> 下载安装包</li>
+                                <li>运行安装程序，按默认设置安装</li>
+                                <li>验证安装：打开终端输入 <code>node --version</code></li>
+                            </ul>
+                        </li>
+                        <li>安装HTTP服务器
+                            <ul>
+                                <li>全局安装http-server：<code>npm install -g http-server</code></li>
+                                <li>或使用Live Server插件（VS Code推荐）</li>
+                            </ul>
+                        </li>
+                        <li>创建项目目录结构
+                            <ul>
+                                <li>创建项目文件夹</li>
+                                <li>创建扩展主文件（如 extension.js）</li>
+                                <li>创建测试HTML文件</li>
+                            </ul>
+                        </li>
+                        <li>启动本地服务器
+                            <ul>
+                                <li>进入项目目录</li>
+                                <li>运行命令：<code>http-server</code></li>
+                                <li>访问 <code>http://localhost:8080</code></li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>浏览器开发者工具使用</h3>
+                    <ul>
+                        <li>打开开发者工具（F12或右键检查）</li>
+                        <li>使用Console查看日志输出</li>
+                        <li>使用Network监控API请求</li>
+                        <li>使用Sources调试JavaScript代码</li>
+                        <li>使用Elements检查DOM结构</li>
+                    </ul>
+                    
+                    <div class="tip">
+                        <strong>提示：</strong>使用Live Server插件可以更方便地进行实时预览，代码保存后自动刷新页面。
+                    </div>
+                </section>
+                
+                <section id="basic-structure" class="section">
+                    <h2>3. 扩展基本结构</h2>
+                    <p>一个标准的Scratch扩展包含以下核心组件：</p>
+                    
+                    <h3>扩展类结构详解</h3>
+                    <div class="code-block">
+// 扩展主类
+class MyExtension {
+    constructor(runtime) {
+        // 构造函数，接收运行时对象
+        this.runtime = runtime;
+        
+        // 国际化消息定义
+        this._formatMessage = runtime.getFormatMessage({
+            'en': {
+                'myExtension.extensionName': 'My Extension',
+                'myExtension.blockName': 'do something with [PARAMETER]',
+            },
+            'zh-cn': {
+                'myExtension.extensionName': '我的扩展',
+                'myExtension.blockName': '用[PARAMETER]做某事',
+            }
+        });
+        
+        // 初始化扩展状态
+        this.initializeState();
+    }
+    
+    // 初始化状态
+    initializeState() {
+        this.counter = 0;
+        this.isActive = false;
+        this.dataCache = new Map();
+    }
+    
+    // 获取扩展信息
+    getInfo() {
+        return {
+            id: 'myExtension',  // 扩展唯一标识
+            name: this._formatMessage('myExtension.extensionName'),  // 扩展名称
+            blockIconURI: 'data:image/svg+xml;base64,...',  // 扩展图标（可选）
+            menuIconURI: 'image/svg+xml;base64,...',   // 菜单图标（可选）
+            
+            // 积木定义
+            blocks: [
+                {
+                    opcode: 'myBlock',  // 操作码，对应方法名
+                    blockType: Scratch.BlockType.COMMAND,  // 积木类型
+                    text: this._formatMessage('myExtension.blockName'),  // 积木文本
+                    arguments: {
+                        PARAMETER: {
+                            type: Scratch.ArgumentType.STRING,  // 参数类型
+                            defaultValue: 'value'  // 默认值
+                        }
+                    }
+                }
+            ],
+            
+            // 菜单定义
+            menus: {
+                languages: [
+                    { text: '中文', value: 'chinese' },
+                    { text: '英文', value: 'english' }
+                ]
+            }
+        };
+    }
+    
+    // 积木功能实现
+    myBlock(args) {
+        // 积木功能实现
+        console.log('执行积木:', args.PARAMETER);
+        return '执行完成';
+    }
+    
+    // 扩展清理方法
+    _shutdown() {
+        // 清理资源，如定时器、连接等
+        console.log('扩展关闭');
+    }
+    
+    // 扩展状态检查
+    _getStatus() {
+        return {
+            status: 2,  // 2表示就绪，1表示警告，0表示错误
+            msg: '扩展已就绪'
+        };
+    }
+}
+                    </div>
+                    
+                    <h3>关键方法说明</h3>
+                    <ul>
+                        <li><strong>constructor(runtime)</strong>: 构造函数，接收运行时对象，用于初始化扩展</li>
+                        <li><strong>getInfo()</strong>: 返回扩展信息和积木定义，这是扩展的核心配置</li>
+                        <li><strong>_shutdown()</strong>: 扩展关闭时调用，用于清理资源</li>
+                        <li><strong>_getStatus()</strong>: 返回扩展状态信息</li>
+                        <li><strong>自定义方法</strong>: 实现具体功能的函数，名称与opcode对应</li>
+                    </ul>
+                    
+                    <h3>扩展注册方式</h3>
+                    <div class="code-block">
+// 方式一：直接注册（适用于简单扩展）
+Scratch.extensions.register(new MyExtension(runtime));
+
+// 方式二：模块化注册（适用于复杂扩展）
+(function(Scratch) {
+    'use strict';
+    
+    class MyExtension {
+        // 扩展实现...
+    }
+    
+    // 注册扩展
+    Scratch.extensions.register(new MyExtension());
+})(Scratch);
+                    </div>
+                </section>
+                
+                <section id="block-types" class="section">
+                    <h2>4. 积木类型详解</h2>
+                    <p>Scratch支持多种积木类型，每种类型有不同的用途和表现形式。</p>
+                    
+                    <h3>积木类型分类</h3>
+                    <table>
+                        <tr>
+                            <th>类型</th>
+                            <th>常量</th>
+                            <th>用途</th>
+                            <th>示例</th>
+                        </tr>
+                        <tr>
+                            <td>命令积木</td>
+                            <td>COMMAND</td>
+                            <td>执行操作，无返回值</td>
+                            <td>移动10步</td>
+                        </tr>
+                        <tr>
+                            <td>报告积木</td>
+                            <td>REPORTER</td>
+                            <td>返回值，用于赋值或条件</td>
+                            <td>获取鼠标X坐标</td>
+                        </tr>
+                        <tr>
+                            <td>布尔积木</td>
+                            <td>BOOLEAN</td>
+                            <td>返回true/false</td>
+                            <td>鼠标按下？</td>
+                        </tr>
+                        <tr>
+                            <td>帽子积木</td>
+                            <td>HAT</td>
+                            <td>事件触发器</td>
+                            <td>当绿旗被点击</td>
+                        </tr>
+                        <tr>
+                            <td>条件积木</td>
+                            <td>CONDITIONAL</td>
+                            <td>条件语句</td>
+                            <td>如果...那么</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>积木定义示例</h3>
+                    <div class="code-block">
+blocks: [
+    // 命令积木 - 执行操作
+    {
+        opcode: 'moveSteps',
+        blockType: Scratch.BlockType.COMMAND,
+        text: '移动 [STEPS] 步',
+        arguments: {
+            STEPS: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 10
+            }
+        }
+    },
+    
+    // 报告积木 - 返回值
+    {
+        opcode: 'getCurrentTime',
+        blockType: Scratch.BlockType.REPORTER,
+        text: '当前时间'
+    },
+    
+    // 布尔积木 - 返回布尔值
+    {
+        opcode: 'isEven',
+        blockType: Scratch.BlockType.BOOLEAN,
+        text: '[NUMBER] 是偶数？',
+        arguments: {
+            NUMBER: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 2
+            }
+        }
+    },
+    
+    // 帽子积木 - 事件触发
+    {
+        opcode: 'whenKeyPressed',
+        blockType: Scratch.BlockType.HAT,
+        text: '当 [KEY] 键被按下',
+        arguments: {
+            KEY: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'keys',
+                defaultValue: 'space'
+            }
+        }
+    },
+    
+    // 条件积木 - 条件语句
+    {
+        opcode: 'ifCondition',
+        blockType: Scratch.BlockType.CONDITIONAL,
+        branchCount: 1,
+        text: '如果 [CONDITION] 那么',
+        arguments: {
+            CONDITION: {
+                type: Scratch.ArgumentType.BOOLEAN,
+                defaultValue: true
+            }
+        }
+    }
+]
+                    </div>
+                    
+                    <h3>积木文本格式化</h3>
+                    <div class="code-block">
+// 简单文本
+text: '移动10步'
+
+// 带参数的文本
+text: '移动 [STEPS] 步'
+
+// 多个参数
+text: '在 [X] , [Y] 位置画点'
+
+// 国际化支持
+text: this._formatMessage('myExtension.moveStepsText')
+                    </div>
+                </section>
+                
+                <section id="parameters" class="section">
+                    <h2>5. 参数处理与验证</h2>
+                    <p>正确处理和验证参数是扩展开发的重要环节。</p>
+                    
+                    <h3>参数类型详解</h3>
+                    <table>
+                        <tr>
+                            <th>类型</th>
+                            <th>常量</th>
+                            <th>说明</th>
+                            <th>示例值</th>
+                        </tr>
+                        <tr>
+                            <td>数字</td>
+                            <td>NUMBER</td>
+                            <td>整数或小数</td>
+                            <td>10, 3.14, -5</td>
+                        </tr>
+                        <tr>
+                            <td>字符串</td>
+                            <td>STRING</td>
+                            <td>文本内容</td>
+                            <td>"Hello", "Scratch"</td>
+                        </tr>
+                        <tr>
+                            <td>布尔值</td>
+                            <td>BOOLEAN</td>
+                            <td>true或false</td>
+                            <td>true, false</td>
+                        </tr>
+                        <tr>
+                            <td>角度</td>
+                            <td>ANGLE</td>
+                            <td>0-360度</td>
+                            <td>90, 180, 270</td>
+                        </tr>
+                        <tr>
+                            <td>颜色</td>
+                            <td>COLOR</td>
+                            <td>十六进制颜色值</td>
+                            <td>#FF0000, #00FF00</td>
+                        </tr>
+                        <tr>
+                            <td>下拉菜单</td>
+                            <td>NUMBER, STRING</td>
+                            <td>配合menu属性使用</td>
+                            <td>"选项1", "选项2"</td>
+                        </tr>
+                        <tr>
+                            <td>广播消息</td>
+                            <td>BROADCAST</td>
+                            <td>广播消息选择器</td>
+                            <td>"消息1", "开始"</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>参数验证示例</h3>
+                    <div class="code-block">
+// 带参数验证的积木实现
+calculatePower(args) {
+    // 验证参数类型
+    const base = Number(args.BASE);
+    const exponent = Number(args.EXPONENT);
+    
+    // 参数检查
+    if (isNaN(base) || isNaN(exponent)) {
+        console.error('参数必须是数字');
+        return 0;
+    }
+    
+    // 范围检查
+    if (Math.abs(base) > 1000 || Math.abs(exponent) > 100) {
+        console.warn('参数值过大，可能影响性能');
+    }
+    
+    // 计算结果
+    return Math.pow(base, exponent);
+}
+
+// 字符串参数处理
+processText(args) {
+    const text = String(args.TEXT || '');
+    
+    // 长度检查
+    if (text.length > 1000) {
+        console.warn('文本过长，已截取前1000字符');
+        return text.substring(0, 1000);
+    }
+    
+    return text;
+}
+
+// 下拉菜单参数
+{
+    opcode: 'setLanguage',
+    blockType: Scratch.BlockType.COMMAND,
+    text: '设置语言为 [LANGUAGE]',
+    arguments: {
+        LANGUAGE: {
+            type: Scratch.ArgumentType.STRING,
+            menu: 'languages',
+            defaultValue: 'chinese'
+        }
+    }
+}
+
+// 菜单定义
+get menus() {
+    return {
+        languages: [
+            { text: '中文', value: 'chinese' },
+            { text: '英文', value: 'english' },
+            { text: '日文', value: 'japanese' },
+            { text: '韩文', value: 'korean' }
+        ],
+        keys: [
+            { text: '空格键', value: 'space' },
+            { text: '回车键', value: 'enter' },
+            { text: '上箭头', value: 'up' },
+            { text: '下箭头', value: 'down' }
+        ]
+    };
+}
+                    </div>
+                    
+                    <h3>参数默认值设置</h3>
+                    <div class="code-block">
+arguments: {
+    NUMBER: {
+        type: Scratch.ArgumentType.NUMBER,
+        defaultValue: 0  // 数字默认值
+    },
+    TEXT: {
+        type: Scratch.ArgumentType.STRING,
+        defaultValue: '默认文本'  // 字符串默认值
+    },
+    ENABLED: {
+        type: Scratch.ArgumentType.BOOLEAN,
+        defaultValue: true  // 布尔默认值
+    },
+    COLOR: {
+        type: Scratch.ArgumentType.COLOR,
+        defaultValue: '#ff0000'  // 颜色默认值
+    }
+}
+                    </div>
+                </section>
+                
+                <section id="api-integration" class="section">
+                    <h2>6. 外部API集成</h2>
+                    <p>通过集成外部API，可以让Scratch扩展具备更强大的功能。</p>
+                    
+                    <h3>HTTP请求处理</h3>
+                    <div class="code-block">
+// 异步API调用示例
+async getWeather(args) {
+    const city = args.CITY;
+    const apiKey = 'YOUR_API_KEY';
+    const url = `https://api.weather.com/v1/current?city=${encodeURIComponent(city)}&key=${apiKey}`;
+    
+    try {
+        const response = await fetch(url);
+        
+        // 检查响应状态
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        return `${data.temperature}°C, ${data.description}`;
+    } catch (error) {
+        console.error('获取天气信息失败:', error);
+        return '无法获取天气信息';
+    }
+}
+
+// 在积木定义中使用
+{
+    opcode: 'getWeather',
+    blockType: Scratch.BlockType.REPORTER,
+    text: '城市 [CITY] 的天气',
+    arguments: {
+        CITY: {
+            type: Scratch.ArgumentType.STRING,
+            defaultValue: '北京'
+        }
+    }
+}
+                    </div>
+                    
+                    <h3>数据缓存优化</h3>
+                    <div class="code-block">
+class MyExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+        this.cache = new Map();
+        this.cacheTimeout = 5 * 60 * 1000; // 5分钟缓存
+    }
+    
+    async fetchDataWithCache(url) {
+        const now = Date.now();
+        const cached = this.cache.get(url);
+        
+        // 检查缓存是否有效
+        if (cached && (now - cached.timestamp) < this.cacheTimeout) {
+            console.log('使用缓存数据:', url);
+            return cached.data;
+        }
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            // 更新缓存
+            this.cache.set(url, { data, timestamp: now });
+            console.log('获取新数据并缓存:', url);
+            
+            return data;
+        } catch (error) {
+            console.error('数据获取失败:', error);
+            
+            // 如果有缓存数据，即使过期也返回
+            if (cached) {
+                console.log('返回过期缓存数据:', url);
+                return cached.data;
+            }
+            
+            return null;
+        }
+    }
+    
+    // 清理过期缓存
+    cleanupCache() {
+        const now = Date.now();
+        for (const [key, value] of this.cache.entries()) {
+            if ((now - value.timestamp) >= this.cacheTimeout) {
+                this.cache.delete(key);
+            }
+        }
+    }
+}
+                    </div>
+                    
+                    <h3>API密钥安全处理</h3>
+                    <div class="code-block">
+// 方式一：使用代理服务器（推荐）
+async secureApiCall(args) {
+    const proxyUrl = 'https://your-proxy-server.com/api';
+    const requestData = {
+        action: 'getWeather',
+        city: args.CITY
+    };
+    
+    try {
+        const response = await fetch(proxyUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+        
+        const data = await response.json();
+        return data.result;
+    } catch (error) {
+        console.error('API调用失败:', error);
+        return '调用失败';
+    }
+}
+
+// 方式二：用户输入API密钥
+{
+    opcode: 'setApiKey',
+    blockType: Scratch.BlockType.COMMAND,
+    text: '设置API密钥为 [KEY]',
+    arguments: {
+        KEY: {
+            type: Scratch.ArgumentType.STRING,
+            defaultValue: ''
+        }
+    }
+}
+
+// 在扩展中存储API密钥
+setApiKey(args) {
+    this.apiKey = args.KEY;
+    // 可以考虑加密存储
+}
+                    </div>
+                    
+                    <div class="warning">
+                        <strong>安全提醒：</strong>不要在客户端代码中暴露API密钥，建议通过代理服务器处理敏感请求。对于必须在客户端使用的API，应指导用户申请自己的API密钥。
+                    </div>
+                </section>
+                
+                <section id="testing" class="section">
+                    <h2>7. 测试与调试</h2>
+                    <p>完善的测试流程能确保扩展的稳定性和可靠性。</p>
+                    
+                    <h3>本地测试方法</h3>
+                    <ol>
+                        <li>启动本地HTTP服务器
+                            <ul>
+                                <li>确保扩展文件可通过HTTP访问</li>
+                                <li>检查文件路径是否正确</li>
+                                <li>验证服务器是否正常运行</li>
+                            </ul>
+                        </li>
+                        <li>在Scratch中加载扩展
+                            <ul>
+                                <li>打开Scratch编辑器</li>
+                                <li>进入扩展管理界面</li>
+                                <li>输入扩展URL：<code>http://localhost:8080/extension.js</code></li>
+                                <li>点击加载并测试功能</li>
+                            </ul>
+                        </li>
+                        <li>使用浏览器开发者工具
+                            <ul>
+                                <li>打开Console查看日志输出</li>
+                                <li>使用Network监控API请求</li>
+                                <li>设置断点调试代码</li>
+                            </ul>
+                        </li>
+                        <li>测试各种边界条件
+                            <ul>
+                                <li>测试空参数、无效参数</li>
+                                <li>测试网络异常情况</li>
+                                <li>测试并发调用</li>
+                                <li>测试长时间运行</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>调试技巧</h3>
+                    <div class="code-block">
+// 添加调试日志
+myBlock(args) {
+    console.log('积木被调用:', args);
+    
+    try {
+        // 执行主要逻辑
+        const result = this.performAction(args);
+        console.log('执行结果:', result);
+        return result;
+    } catch (error) {
+        console.error('积木执行出错:', error);
+        // 返回默认值或错误信息
+        return '错误';
+    }
+}
+
+// 性能监控
+async timeConsumingOperation(args) {
+    const start = performance.now();
+    
+    const result = await this.doSomething(args);
+    
+    const end = performance.now();
+    console.log(`操作耗时: ${end - start} 毫秒`);
+    
+    // 性能警告
+    if ((end - start) > 1000) {
+        console.warn('操作耗时过长，可能影响用户体验');
+    }
+    
+    return result;
+}
+
+// 状态检查
+checkExtensionStatus() {
+    console.log('扩展状态检查:');
+    console.log('- 运行时对象:', this.runtime);
+    console.log('- 缓存大小:', this.cache?.size || 0);
+    console.log('- 当前计数器:', this.counter);
+}
+                    </div>
+                    
+                    <h3>单元测试框架</h3>
+                    <div class="code-block">
+// 简单的测试函数
+function runTests() {
+    const extension = new MyExtension();
+    
+    // 测试报告积木
+    const testResult = extension.addNumbers({A: 2, B: 3});
+    console.assert(testResult === 5, '加法测试失败');
+    
+    // 测试布尔积木
+    const boolResult = extension.isEven({NUMBER: 4});
+    console.assert(boolResult === true, '偶数判断测试失败');
+    
+    // 测试边界条件
+    const edgeResult = extension.divide({A: 10, B: 0});
+    console.assert(edgeResult === '除数不能为零', '除零测试失败');
+    
+    console.log('所有测试完成');
+}
+
+// 自动化测试示例
+class ExtensionTester {
+    constructor(extension) {
+        this.extension = extension;
+        this.testResults = [];
+    }
+    
+    test(name, testFunction) {
+        try {
+            const result = testFunction();
+            this.testResults.push({name, passed: result, error: null});
+        } catch (error) {
+            this.testResults.push({name, passed: false, error: error.message});
+        }
+    }
+    
+    runAllTests() {
+        this.test('加法运算', () => {
+            return this.extension.add({A: 1, B: 2}) === 3;
+        });
+        
+        this.test('字符串处理', () => {
+            return this.extension.toUpperCase({TEXT: 'hello'}) === 'HELLO';
+        });
+        
+        // 输出测试结果
+        this.testResults.forEach(result => {
+            if (result.passed) {
+                console.log(`✓ ${result.name}`);
+            } else {
+                console.error(`✗ ${result.name}: ${result.error}`);
+            }
+        });
+    }
+}
+                    </div>
+                </section>
+                
+                <section id="deployment" class="section">
+                    <h2>8. 部署与发布</h2>
+                    <p>将完成的扩展部署到生产环境，供用户使用。</p>
+                    
+                    <h3>部署选项</h3>
+                    <ul>
+                        <li><strong>GitHub Pages</strong>: 免费静态托管服务，适合开源项目
+                            <ul>
+                                <li>创建GitHub仓库</li>
+                                <li>将扩展文件推送到仓库</li>
+                                <li>在仓库设置中启用GitHub Pages</li>
+                                <li>使用提供的URL加载扩展</li>
+                            </ul>
+                        </li>
+                        <li><strong>Vercel/Netlify</strong>: 现代化部署平台，支持自动部署
+                            <ul>
+                                <li>连接Git仓库</li>
+                                <li>配置自动构建和部署</li>
+                                <li>获得全球CDN加速</li>
+                            </ul>
+                        </li>
+                        <li><strong>自建服务器</strong>: 完全控制部署环境
+                            <ul>
+                                <li>租用云服务器</li>
+                                <li>配置Web服务器（Nginx/Apache）</li>
+                                <li>设置SSL证书</li>
+                                <li>配置域名解析</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>GitHub Pages部署步骤</h3>
+                    <ol>
+                        <li>创建GitHub账户和仓库
+                            <ul>
+                                <li>访问 <a href="https://github.com" target="_blank">github.com</a></li>
+                                <li>创建新仓库，命名为 <code>my-scratch-extension</code></li>
+                                <li>初始化仓库（添加README）</li>
+                            </ul>
+                        </li>
+                        <li>上传扩展文件
+                            <ul>
+                                <li>克隆仓库到本地</li>
+                                <li>将扩展文件放入仓库目录</li>
+                                <li>提交并推送更改</li>
+                            </ul>
+                        </li>
+                        <li>启用GitHub Pages
+                            <ul>
+                                <li>进入仓库Settings</li>
+                                <li>找到Pages设置</li>
+                                <li>选择Source为main分支</li>
+                                <li>保存设置</li>
+                            </ul>
+                        </li>
+                        <li>获取扩展URL
+                            <ul>
+                                <li>Pages启用后会显示URL</li>
+                                <li>通常为 <code>https://username.github.io/repository/extension.js</code></li>
+                                <li>在Scratch中使用此URL加载扩展</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h3>性能优化建议</h3>
+                    <ul>
+                        <li>压缩JavaScript文件
+                            <ul>
+                                <li>使用工具如UglifyJS或Terser</li>
+                                <li>移除调试代码和注释</li>
+                                <li>合并多个文件</li>
+                            </ul>
+                        </li>
+                        <li>使用CDN加速资源加载
+                            <ul>
+                                <li>选择可靠的CDN服务商</li>
+                                <li>配置缓存策略</li>
+                                <li>监控加载性能</li>
+                            </ul>
+                        </li>
+                        <li>实现合理的缓存策略
+                            <ul>
+                                <li>设置HTTP缓存头</li>
+                                <li>使用版本号管理更新</li>
+                                <li>避免缓存污染</li>
+                            </ul>
+                        </li>
+                        <li>减少不必要的网络请求
+                            <ul>
+                                <li>合并API调用</li>
+                                <li>使用数据缓存</li>
+                                <li>延迟加载非关键资源</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                
+                <section id="advanced" class="section">
+                    <h2>9. 高级开发技巧</h2>
+                    <p>掌握高级技巧可以开发出更专业、更强大的扩展。</p>
+                    
+                    <h3>状态管理</h3>
+                    <div class="code-block">
+class AdvancedExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+        this.state = {
+            counter: 0,
+            isActive: false,
+            userData: null,
+            timers: new Map(),
+            subscriptions: new Set()
+        };
+    }
+    
+    // 状态更新方法
+    updateCounter(args) {
+        this.state.counter += Number(args.VALUE);
+        // 通知舞台更新
+        this.runtime.requestRedraw();
+    }
+    
+    // 获取状态
+    getCounter() {
+        return this.state.counter;
+    }
+    
+    // 状态持久化
+    saveState() {
+        try {
+            const stateString = JSON.stringify(this.state);
+            localStorage.setItem('extensionState', stateString);
+        } catch (error) {
+            console.error('状态保存失败:', error);
+        }
+    }
+    
+    // 状态恢复
+    loadState() {
+        try {
+            const stateString = localStorage.getItem('extensionState');
+            if (stateString) {
+                this.state = JSON.parse(stateString);
+            }
+        } catch (error) {
+            console.error('状态恢复失败:', error);
+        }
+    }
+}
+                    </div>
+                    
+                    <h3>自定义积木外观</h3>
+                    <div class="code-block">
+getInfo() {
+    return {
+        id: 'advancedExtension',
+        name: '高级扩展',
+        color1: '#a5d296',  // 主色
+        color2: '#8bc34a',  // 次色
+        color3: '#7cb342',  // 边框色
+        blockIconURI: 'image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjQTVEMjk2Ii8+CjxwYXRoIGQ9Ik0xNSAyMEgxNVYyMEgxNVpNMjAgMjVIMjBWMTVIMjBWMTVWMjVaTTI1IDIwSDI1VjIwSDI1WiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+Cjwvc3ZnPgo=',  // SVG图标
+        menuIconURI: 'image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjQTVEMjk2Ii8+CjxwYXRoIGQ9Ik03LjUgMTBINS41VjEwSDcuNVoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSIxMCAxMi41SDEwVjcuNUgxMFY3LjVWMTIuNVoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8cGF0aCBkPSIxMi41IDEwSDEyLjVWMTBIMTIuNVoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K',  // 菜单图标
+        blocks: [
+            {
+                opcode: 'customBlock',
+                blockType: Scratch.BlockType.COMMAND,
+                text: '自定义操作 [INPUT]',
+                arguments: {
+                    INPUT: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: '示例'
+                    }
+                }
+            }
+        ]
+    };
+}
+                    </div>
+                    
+                    <h3>错误处理与用户反馈</h3>
+                    <div class="code-block">
+async fetchData(args) {
+    try {
+        const response = await fetch(args.URL);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        return await response.text();
+    } catch (error) {
+        // 向用户显示错误信息
+        this.runtime.startHats('extensionError', {
+            ERROR_MESSAGE: error.message
+        });
+        
+        // 记录错误日志
+        console.error('数据获取失败:', error);
+        
+        return '获取失败';
+    }
+}
+
+// 自定义错误处理
+handleError(error, context) {
+    console.error(`[${context}] 错误:`, error);
+    
+    // 用户友好的错误信息
+    const userMessage = this.getUserFriendlyMessage(error);
+    
+    // 可选：显示通知
+    if (this.runtime && this.runtime.emit) {
+        this.runtime.emit('EXTENSION_ERROR', {
+            extension: 'MyExtension',
+            message: userMessage,
+            context: context
+        });
+    }
+    
+    return userMessage;
+}
+
+getUserFriendlyMessage(error) {
+    if (error.name === 'TypeError') {
+        return '网络连接错误，请检查网络设置';
+    }
+    if (error.name === 'SyntaxError') {
+        return '数据格式错误，请联系开发者';
+    }
+    return '操作失败，请重试';
+}
+                    </div>
+                    
+                    <h3>异步操作管理</h3>
+                    <div class="code-block">
+class AsyncExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+        this.activeOperations = new Map();
+    }
+    
+    // 异步操作管理
+    async performAsyncOperation(args) {
+        const operationId = this.generateId();
+        
+        // 记录操作
+        this.activeOperations.set(operationId, {
+            status: 'pending',
+            startTime: Date.now()
+        });
+        
+        try {
+            const result = await this.longRunningTask(args);
+            
+            // 更新操作状态
+            this.activeOperations.set(operationId, {
+                status: 'completed',
+                result: result,
+                endTime: Date.now()
+            });
+            
+            return result;
+        } catch (error) {
+            this.activeOperations.set(operationId, {
+                status: 'failed',
+                error: error.message,
+                endTime: Date.now()
+            });
+            
+            throw error;
+        }
+    }
+    
+    // 取消操作
+    cancelOperation(operationId) {
+        const operation = this.activeOperations.get(operationId);
+        if (operation && operation.status === 'pending') {
+            // 取消逻辑
+            operation.status = 'cancelled';
+            this.activeOperations.delete(operationId);
+        }
+    }
+    
+    // 获取操作状态
+    getOperationStatus(operationId) {
+        return this.activeOperations.get(operationId) || null;
+    }
+    
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+}
+                    </div>
+                </section>
+                
+                <section id="examples" class="section">
+                    <h2>10. 实例教程</h2>
+                    <p>通过具体实例学习扩展开发的完整流程。</p>
+                    
+                    <h3>实例1：数学计算扩展</h3>
+                    <div class="code-block">
+(function(ext) {
+    ext._shutdown = function() {};
+    
+    ext._getStatus = function() {
+        return {status: 2, msg: 'Ready'};
+    };
+    
+    ext.factorial = function(n) {
+        if (n < 0) return '错误：负数无阶乘';
+        if (n === 0 || n === 1) return 1;
+        
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    };
+    
+    ext.gcd = function(a, b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        while (b) {
+            let t = b;
+            b = a % b;
+            a = t;
+        }
+        return a;
+    };
+    
+    ext.isPrime = function(n) {
+        n = Math.abs(parseInt(n));
+        if (n < 2) return false;
+        if (n === 2) return true;
+        if (n % 2 === 0) return false;
+        
+        for (let i = 3; i <= Math.sqrt(n); i += 2) {
+            if (n % i === 0) return false;
+        }
+        return true;
+    };
+    
+    var descriptor = {
+        blocks: [
+            ['r', '%n 的阶乘', 'factorial', 5],
+            ['r', '%n 和 %n 的最大公约数', 'gcd', 12, 8],
+            ['b', '%n 是质数？', 'isPrime', 17]
+        ]
+    };
+    
+    ScratchExtensions.register('数学扩展', descriptor, ext);
+})({});
+                    </div>
+                    
+                    <h3>实例2：天气查询扩展</h3>
+                    <div class="code-block">
+class WeatherExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+        this.cache = new Map();
+        this.cacheTimeout = 10 * 60 * 1000; // 10分钟缓存
+    }
+    
+    getInfo() {
+        return {
+            id: 'weatherExtension',
+            name: '天气查询',
+            color1: '#2196F3',
+            color2: '#1976D2',
+            color3: '#0D47A1',
+            blocks: [
+                {
+                    opcode: 'getTemperature',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '城市 [CITY] 的温度',
+                    arguments: {
+                        CITY: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: '北京'
+                        }
+                    }
+                },
+                {
+                    opcode: 'getWeatherDescription',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '城市 [CITY] 的天气描述',
+                    arguments: {
+                        CITY: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: '北京'
+                        }
+                    }
+                }
+            ]
+        };
+    }
+    
+    async getTemperature(args) {
+        const data = await this.fetchWeatherData(args.CITY);
+        return data ? `${Math.round(data.main.temp)}°C` : '无法获取';
+    }
+    
+    async getWeatherDescription(args) {
+        const data = await this.fetchWeatherData(args.CITY);
+        return data ? data.weather[0].description : '无法获取';
+    }
+    
+    async fetchWeatherData(city) {
+        const cacheKey = `weather_${city}`;
+        const cached = this.cache.get(cacheKey);
+        const now = Date.now();
+        
+        if (cached && (now - cached.timestamp) < this.cacheTimeout) {
+            return cached.data;
+        }
+        
+        try {
+            // 注意：实际使用时需要替换为有效的API密钥
+            const apiKey = 'YOUR_API_KEY';
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}&lang=zh_cn`;
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            this.cache.set(cacheKey, { data, timestamp: now });
+            return data;
+        } catch (error) {
+            console.error('天气数据获取失败:', error);
+            return null;
+        }
+    }
+}
+
+// 注册扩展
+(function() {
+    const extensionClass = WeatherExtension;
+    if (typeof window === 'undefined') {
+        module.exports = extensionClass;
+    } else {
+        window.WeatherExtension = extensionClass;
+    }
+})();
+                    </div>
+                    
+                    <h3>实例3：计时器扩展</h3>
+                    <div class="code-block">
+class TimerExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+        this.timers = new Map();
+        this.intervals = new Map();
+    }
+    
+    getInfo() {
+        return {
+            id: 'timerExtension',
+            name: '计时器',
+            color1: '#FF9800',
+            color2: '#F57C00',
+            color3: '#E65100',
+            blocks: [
+                {
+                    opcode: 'startTimer',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: '开始计时器 [NAME]',
+                    arguments: {
+                        NAME: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'myTimer'
+                        }
+                    }
+                },
+                {
+                    opcode: 'stopTimer',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: '停止计时器 [NAME]',
+                    arguments: {
+                        NAME: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'myTimer'
+                        }
+                    }
+                },
+                {
+                    opcode: 'getTimerValue',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '计时器 [NAME] 的值',
+                    arguments: {
+                        NAME: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'myTimer'
+                        }
+                    }
+                },
+                {
+                    opcode: 'resetTimer',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: '重置计时器 [NAME]',
+                    arguments: {
+                        NAME: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'myTimer'
+                        }
+                    }
+                }
+            ]
+        };
+    }
+    
+    startTimer(args) {
+        const name = args.NAME;
+        if (!this.timers.has(name)) {
+            this.timers.set(name, {
+                startTime: Date.now(),
+                elapsed: 0,
+                running: true
+            });
+        } else {
+            const timer = this.timers.get(name);
+            if (!timer.running) {
+                timer.startTime = Date.now() - timer.elapsed;
+                timer.running = true;
+            }
+        }
+    }
+    
+    stopTimer(args) {
+        const name = args.NAME;
+        const timer = this.timers.get(name);
+        if (timer && timer.running) {
+            timer.elapsed = Date.now() - timer.startTime;
+            timer.running = false;
+        }
+    }
+    
+    getTimerValue(args) {
+        const name = args.NAME;
+        const timer = this.timers.get(name);
+        if (!timer) return 0;
+        
+        if (timer.running) {
+            return (Date.now() - timer.startTime) / 1000; // 返回秒数
+        } else {
+            return timer.elapsed / 1000; // 返回秒数
+        }
+    }
+    
+    resetTimer(args) {
+        const name = args.NAME;
+        this.timers.delete(name);
+    }
+    
+    _shutdown() {
+        // 清理所有定时器
+        this.timers.clear();
+    }
+}
+                    </div>
+                    
+                    <h3>实例4：文本处理扩展</h3>
+                    <div class="code-block">
+class TextExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+    }
+    
+    getInfo() {
+        return {
+            id: 'textExtension',
+            name: '文本处理',
+            color1: '#9C27B0',
+            color2: '#7B1FA2',
+            color3: '#4A148C',
+            blocks: [
+                {
+                    opcode: 'toUpperCase',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '[TEXT] 转大写',
+                    arguments: {
+                        TEXT: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'hello world'
+                        }
+                    }
+                },
+                {
+                    opcode: 'reverseString',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '反转文本 [TEXT]',
+                    arguments: {
+                        TEXT: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'hello'
+                        }
+                    }
+                },
+                {
+                    opcode: 'countWords',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '统计 [TEXT] 中的单词数',
+                    arguments: {
+                        TEXT: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'hello world'
+                        }
+                    }
+                },
+                {
+                    opcode: 'replaceText',
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: '在 [TEXT] 中将 [OLD] 替换为 [NEW]',
+                    arguments: {
+                        TEXT: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'hello world'
+                        },
+                        OLD: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'world'
+                        },
+                        NEW: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'Scratch'
+                        }
+                    }
+                }
+            ]
+        };
+    }
+    
+    toUpperCase(args) {
+        return String(args.TEXT || '').toUpperCase();
+    }
+    
+    reverseString(args) {
+        return String(args.TEXT || '').split('').reverse().join('');
+    }
+    
+    countWords(args) {
+        const text = String(args.TEXT || '').trim();
+        return text ? text.split(/\s+/).length : 0;
+    }
+    
+    replaceText(args) {
+        const text = String(args.TEXT || '');
+        const oldText = String(args.OLD || '');
+        const newText = String(args.NEW || '');
+        
+        if (!oldText) return text;
+        return text.split(oldText).join(newText);
+    }
+}
+                    </div>
+                    
+                    <div class="tip">
+                        <strong>开发建议：</strong>从简单功能开始，逐步增加复杂性。每个功能模块都要有对应的测试用例。建议先实现核心功能，再添加辅助功能。
+                    </div>
+                </section>
+                
+                <section id="best-practices" class="section">
+                    <h2>11. 最佳实践</h2>
+                    <p>遵循最佳实践可以提高代码质量和用户体验。</p>
+                    
+                    <h3>代码组织规范</h3>
+                    <ul>
+                        <li><strong>模块化设计</strong>
+                            <ul>
+                                <li>将功能分解为独立的模块</li>
+                                <li>每个模块职责单一</li>
+                                <li>提供清晰的接口</li>
+                            </ul>
+                        </li>
+                        <li><strong>命名规范</strong>
+                            <ul>
+                                <li>使用有意义的变量和函数名</li>
+                                <li>遵循驼峰命名法</li>
+                                <li>常量使用大写字母</li>
+                            </ul>
+                        </li>
+                        <li><strong>注释和文档</strong>
+                            <ul>
+                                <li>为复杂逻辑添加注释</li>
+                                <li>编写API文档</li>
+                                <li>提供使用示例</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>性能优化</h3>
+                    <ul>
+                        <li><strong>避免阻塞操作</strong>
+                            <ul>
+                                <li>使用异步操作处理耗时任务</li>
+                                <li>避免在主线程执行复杂计算</li>
+                                <li>合理使用Web Workers</li>
+                            </ul>
+                        </li>
+                        <li><strong>内存管理</strong>
+                            <ul>
+                                <li>及时清理不用的对象</li>
+                                <li>避免内存泄漏</li>
+                                <li>合理使用缓存</li>
+                            </ul>
+                        </li>
+                        <li><strong>网络优化</strong>
+                            <ul>
+                                <li>合并HTTP请求</li>
+                                <li>使用缓存减少重复请求</li>
+                                <li>压缩传输数据</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>用户体验优化</h3>
+                    <ul>
+                        <li><strong>错误处理</strong>
+                            <ul>
+                                <li>提供友好的错误信息</li>
+                                <li>优雅处理异常情况</li>
+                                <li>记录错误日志</li>
+                            </ul>
+                        </li>
+                        <li><strong>反馈机制</strong>
+                            <ul>
+                                <li>及时响应用户操作</li>
+                                <li>提供加载状态提示</li>
+                                <li>显示操作结果</li>
+                            </ul>
+                        </li>
+                        <li><strong>国际化支持</strong>
+                            <ul>
+                                <li>支持多语言</li>
+                                <li>适配不同地区习惯</li>
+                                <li>提供本地化内容</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>安全性考虑</h3>
+                    <ul>
+                        <li><strong>输入验证</strong>
+                            <ul>
+                                <li>验证所有用户输入</li>
+                                <li>防止XSS攻击</li>
+                                <li>限制输入长度</li>
+                            </ul>
+                        </li>
+                        <li><strong>API安全</strong>
+                            <ul>
+                                <li>不要暴露敏感信息</li>
+                                <li>使用HTTPS协议</li>
+                                <li>实施访问控制</li>
+                            </ul>
+                        </li>
+                        <li><strong>权限管理</strong>
+                            <ul>
+                                <li>最小权限原则</li>
+                                <li>用户授权机制</li>
+                                <li>隐私保护</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                
+                <section id="troubleshooting" class="section">
+                    <h2>12. 常见问题与解决方案</h2>
+                    <p>开发过程中可能遇到的问题及解决方法。</p>
+                    
+                    <h3>扩展加载问题</h3>
+                    <div class="example-box">
+                        <div class="example-title">问题：扩展无法加载</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>URL地址错误</li>
+                            <li>服务器未启动</li>
+                            <li>文件路径问题</li>
+                            <li>浏览器安全限制</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>检查URL是否正确</li>
+                            <li>确认本地服务器已启动</li>
+                            <li>验证文件是否存在</li>
+                            <li>使用HTTP服务器而非文件协议</li>
+                            <li>检查浏览器控制台错误信息</li>
+                        </ol>
+                    </div>
+                    
+                    <h3>积木功能异常</h3>
+                    <div class="example-box">
+                        <div class="example-title">问题：积木不执行或返回错误结果</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>方法名与opcode不匹配</li>
+                            <li>参数处理错误</li>
+                            <li>异步操作未正确处理</li>
+                            <li>语法错误</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>检查方法名是否与opcode一致</li>
+                            <li>验证参数类型和默认值</li>
+                            <li>确保异步方法正确使用async/await</li>
+                            <li>使用开发者工具调试代码</li>
+                            <li>添加console.log调试信息</li>
+                        </ol>
+                    </div>
+                    
+                    <h3>API调用失败</h3>
+                    <div class="example-box">
+                        <div class="example-title">问题：外部API无法访问</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>API密钥错误或过期</li>
+                            <li>网络连接问题</li>
+                            <li>CORS跨域限制</li>
+                            <li>API服务不可用</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>验证API密钥是否正确</li>
+                            <li>检查网络连接状态</li>
+                            <li>使用代理服务器解决跨域问题</li>
+                            <li>查看API文档确认接口状态</li>
+                            <li>实现错误重试机制</li>
+                        </ol>
+                    </div>
+                    
+                    <h3>性能问题</h3>
+                    <div class="example-box">
+                        <div class="example-title">问题：扩展运行缓慢</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>频繁的网络请求</li>
+                            <li>复杂的计算操作</li>
+                            <li>内存泄漏</li>
+                            <li>未使用缓存机制</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>实现数据缓存</li>
+                            <li>优化算法复杂度</li>
+                            <li>及时清理不用的资源</li>
+                            <li>使用防抖和节流技术</li>
+                            <li>分析性能瓶颈</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <section id="resources" class="section">
+                    <h2>13. 学习资源与参考</h2>
+                    <p>丰富的学习资源帮助你深入掌握Scratch扩展开发。</p>
+                    
+                    <h3>官方文档</h3>
+                    <ul>
+                        <li><a href="https://scratch.mit.edu/developers" target="_blank">Scratch开发者文档</a> - 官方扩展开发指南</li>
+                        <li><a href="https://github.com/LLK/scratch-vm" target="_blank">Scratch VM源码</a> - Scratch虚拟机实现</li>
+                        <li><a href="https://github.com/LLK/scratch-gui" target="_blank">Scratch GUI源码</a> - Scratch界面实现</li>
+                    </ul>
+                    
+                    <h3>开源项目参考</h3>
+                    <ul>
+                        <li><a href="https://github.com/LLK/scratch-extensions" target="_blank">官方扩展集合</a> - 官方提供的扩展示例</li>
+                        <li><a href="https://github.com/scratchfoundation" target="_blank">Scratch基金会GitHub</a> - 官方开源项目</li>
+                        <li><a href="https://github.com/topics/scratch-extension" target="_blank">GitHub扩展标签</a> - 社区开发的扩展</li>
+                    </ul>
+                    
+                    <h3>学习教程</h3>
+                    <ul>
+                        <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript" target="_blank">MDN JavaScript教程</a> - JavaScript语言学习</li>
+                        <li><a href="https://www.w3schools.com/js/" target="_blank">W3Schools JavaScript</a> - JavaScript基础教程</li>
+                        <li><a href="https://es6.ruanyifeng.com/" target="_blank">ES6入门教程</a> - 现代JavaScript特性</li>
+                    </ul>
+                    
+                    <h3>工具推荐</h3>
+                    <ul>
+                        <li><strong>开发工具</strong>
+                            <ul>
+                                <li>Visual Studio Code - 强大的代码编辑器</li>
+                                <li>Chrome DevTools - 浏览器调试工具</li>
+                                <li>Postman - API测试工具</li>
+                            </ul>
+                        </li>
+                        <li><strong>构建工具</strong>
+                            <ul>
+                                <li>Webpack - 模块打包工具</li>
+                                <li>Babel - JavaScript编译器</li>
+                                <li>ESLint - 代码质量检查工具</li>
+                            </ul>
+                        </li>
+                        <li><strong>部署平台</strong>
+                            <ul>
+                                <li>GitHub Pages - 免费静态托管</li>
+                                <li>Vercel - 现代化部署平台</li>
+                                <li>Netlify - 静态网站托管</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <h3>社区资源</h3>
+                    <ul>
+                        <li><a href="https://scratch.mit.edu/discuss/" target="_blank">Scratch官方论坛</a> - 开发者交流社区</li>
+                        <li><a href="https://stackoverflow.com/questions/tagged/scratch" target="_blank">Stack Overflow</a> - 技术问答平台</li>
+                        <li><a href="https://github.com/scratchfoundation" target="_blank">GitHub社区</a> - 开源项目协作</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        
+        <footer>
+            开发教程：科技创新<br>
+            科技创新官网：kejicx.github.io
+        </footer>
+    </div>
+    
+    <script>
+        // 目录滚动高亮功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tocLinks = document.querySelectorAll('.toc a');
+            const sections = document.querySelectorAll('.section');
+            
+            function setActiveLink() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', setActiveLink);
+            setActiveLink(); // 初始化调用
+            
+            // 平滑滚动
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 响应式导航菜单
+            function handleResize() {
+                const sidebar = document.querySelector('.sidebar');
+                const mainContent = document.querySelector('.main-content');
+                
+                if (window.innerWidth <= 768) {
+                    sidebar.style.position = 'relative';
+                    sidebar.style.top = '0';
+                } else {
+                    sidebar.style.position = 'sticky';
+                    sidebar.style.top = '20px';
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            handleResize(); // 初始化调用
+        });
+    </script>
+</body>
+</html>
